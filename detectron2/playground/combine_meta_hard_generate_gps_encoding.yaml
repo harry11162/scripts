@@ -22,7 +22,7 @@ spec:
             git pull;
             cd /newdata;
             python3 -m pip install -e detectron2;
-            cd /newdata/detectron2/playground/meta_combine_hard_generate_gps_encoding;
+            cd /newdata/detectron2/playground/combine_meta_hard_generate_gps_encoding;
             ln -s /newdata/domain .;
             python3 train_net.py --num-gpus 2"]
         resources:
