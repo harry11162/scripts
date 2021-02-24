@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: continous-meta-feature-triplet-loss
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: research
+        image: pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
+        #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+        imagePullPolicy: Always
+        # command: ["/bin/sh","-c"]
+        # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+        command: ["sh", "-c"]
+        args: ["apt-get -yq update && apt-get -yqq install git;
+            apt-get -yqq install gcc;
+            apt-get -yqq install g++;
+            apt-get install ffmpeg libsm6 libxext6  -y;
+            cd /newdata/detectron2;
+            git pull;
+            cd /newdata;
+            python3 -m pip install -e detectron2;
+            cd /newdata/detectron2/playground/meta_feature_triplet_loss;
+            ln -s /newdata/domain .;
+            python3 train_net.py --num-gpus 2"]
+        resources:
+          limits:
+            memory: 8Gi
+            cpu: 4
+            nvidia.com/gpu: 2
+          requests:
+            memory: 8Gi
+            cpu: 4
+            nvidia.com/gpu: 2
+        volumeMounts:
+            - name: hm-1t-storage
+              mountPath: /newdata
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: hm-1t-storage
+          persistentVolumeClaim:
+              claimName: hm-1t-storage
+        - name: dshm
+          emptyDir:
+            medium: Memory
