@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job # Deployment will automatically restart when killed. Use Pod if not needed 
+metadata:
+  labels:
+    k8s-app: research
+  generateName: test-rlkit- # replace <your_name> with something that identifies you
+  namespace: rl-multitask
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      metadata:
+        labels:
+          k8s-app: multitask
+      containers:
+      - name: research
+        image: rchal97/mtrl # replace with your your docker image
+        imagePullPolicy: Always
+        command: ["/bin/sh"] # replace this with your own job execution scripts
+        args: ["-c", " git clone https://github.com/vitchyr/rlkit.git; cd rlkit; /opt/conda/envs/mtrl/bin/python examples/ddpg.py"]
+        resources:
+          requests: # Minimum resources needed for the job
+            memory: "8Gi" 
+            cpu: "4" 
+            nvidia.com/gpu: 0 
+          limits: # Maximum resources can be used for the job
+            memory: "8Gi" 
+            cpu: "4" 
+            nvidia.com/gpu: 0 
+        volumeMounts:
+          - mountPath: /ruihan-rl # the directory you can access your persistent storage in container
+            name: ruihan-rl
+          - mountPath: /dev/shm # Crucial for multi-gpu or multi processing jobs -> enlarge shared memory
+            name: dshm
+      volumes:
+        - name: ruihan-rl
+          persistentVolumeClaim:
+            claimName: ruihan-rl
+        - name: dshm
+          emptyDir:
+            medium: Memory

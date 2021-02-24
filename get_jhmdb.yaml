@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: get-jhmdb
+spec:
+  restartPolicy: Never
+  containers:
+  - name: research
+    image: ufoym/deepo
+    #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+    imagePullPolicy: Always
+    # command: ["/bin/sh","-c"]
+    # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+    command: ["sh", "-c"]
+    args: ["cd newdata/datasets;
+            mkdir JHMDB;
+            wget http://files.is.tue.mpg.de/jhmdb/joint_positions.zip;
+            wget http://files.is.tue.mpg.de/jhmdb/puppet_mask.zip;
+            wget http://files.is.tue.mpg.de/jhmdb/sub_splits.zip;
+            wget http://files.is.tue.mpg.de/jhmdb/Rename_Images.tar.gz;
+            unzip sub_splits.zip -d JHMDB/sub_splits;
+            unzip puppet_mask.zip -d JHMDB/;
+            unzip joint_positions.zip -d JHMDB/;
+            tar -zxvf Rename_Images.tar.gz -C JHMDB/;
+            rm -f Rename_Images.tar.gz;
+            rm -f joint_positions.zip;
+            rm -f sub_splits.zip;
+            rm -f puppet_mask.zip"]
+    resources:
+      limits:
+        memory: 4Gi
+        cpu: 1
+      requests:
+        memory: 4Gi
+        cpu: 1
+    volumeMounts:
+      - name: hm-1t-storage
+        mountPath: /newdata
+  volumes:
+    - name: hm-1t-storage
+      persistentVolumeClaim:
+          claimName: hm-1t-storage

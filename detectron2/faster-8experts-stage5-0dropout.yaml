@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: haomiao-faster-8experts-stage5-0dropout
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: research
+        image: pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
+        imagePullPolicy: Always
+        command: ["sh", "-c"]
+        args: ["apt-get -yq update && apt-get -yqq install git;
+            apt-get -yqq install gcc;
+            apt-get -yqq install g++;
+            apt-get install ffmpeg libsm6 libxext6  -y;
+            cd /newdata/detectron2;
+            git pull;
+            cd /newdata;
+            python3 -m pip install -e detectron2;
+            cd /newdata/detectron2;
+            python3 tools/train_domain.py --num-gpus 2 --config-file configs/domain/cond_conv_5_0dropout_faster_rcnn_R_50_FPN_1x.yaml OUTPUT_DIR logs/cond_conv_5_0dropout_faster_rcnn_R_50_FPN_1x DATALOADER.NUM_WORKERS 16"]
+        resources:
+          limits:
+            memory: 8Gi
+            cpu: 4
+            nvidia.com/gpu: 2
+          requests:
+            memory: 8Gi
+            cpu: 4
+            nvidia.com/gpu: 2
+        volumeMounts:
+            - name: hm-1t-storage
+              mountPath: /newdata
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: hm-1t-storage
+          persistentVolumeClaim:
+              claimName: hm-1t-storage
+        - name: dshm
+          emptyDir:
+            medium: Memory

@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hm36-vid-30pts-ttt-16it
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: research
+        image: ak3636/deeplearning:latest
+        #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+        imagePullPolicy: Always
+        # command: ["/bin/sh","-c"]
+        # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+        command: ["sh", "-c"]
+        args: ["eval \"$(ssh-agent -s)\";
+              ssh-add /data/ssh-keys/id_rsa;
+              mkdir /root/.ssh;
+              ssh-keyscan github.com >> /root/.ssh/known_hosts;
+              cp /data/ssh-keys/id_rsa /root/.ssh/;
+              cp /data/ssh-keys/id_rsa.pub /root/.ssh/;
+              pip3 install opencv-contrib-python;
+              pip3 install easydict;
+              pip3 install pyyaml;
+              pip3 install hdf5storage;
+              pip install metayaml;
+              pip install deepdish;
+              pip install -U scikit-learn;
+              pip3 install jupyter;
+              pip3 install --upgrade torch;
+              pip3 install tensorboard;
+              pip3 install opencv-python;
+              pip3 install metayaml;
+              pip3 install tb-nightly;
+              pip3 install tqdm;
+              echo Unzipping;
+              mkdir -p /localdata/h36m_images/hm36;
+              tar -xf /self-sup-online-pvc/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/;
+              cd /data/projects/self-supervised-online/pytorch_projects/imm;
+              export PYTHONPATH=$PYTHONPATH:$(pwd);
+              python3 scripts/test_time_train_online.py --configs configs/paths/default.yaml configs/experiments/hm36-vid-30pts-ttt.yaml --checkpoint best --script TTTTF --nsteps 16"]
+        resources:
+          limits:
+            memory: 6Gi
+            cpu: 2
+            nvidia.com/gpu: 1
+          requests:
+            memory: 6Gi
+            cpu: 2
+            nvidia.com/gpu: 1
+        volumeMounts:
+          - name: hm-storage
+            mountPath: /data
+          - name: self-sup-online-pvc
+            mountPath: /self-sup-online-pvc
+          - name: dshm
+            mountPath: /dev/shm
+      volumes:
+        - name: hm-storage
+          persistentVolumeClaim:
+            claimName: hm-storage
+        - name: self-sup-online-pvc
+          persistentVolumeClaim:
+            claimName: self-sup-online-pvc
+        - name: dshm
+          emptyDir:
+            medium: Memory

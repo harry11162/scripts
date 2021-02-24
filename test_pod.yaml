@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+  - name: mypod
+    image: ak3636/deeplearning:latest
+    resources:
+      limits:
+        memory: 100Mi
+        cpu: 100m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+    command: ["sh", "-c", "sleep infinity"]
+    volumeMounts:
+      - name: hm-storage
+        mountPath: /data
+      - name: self-sup-online-pvc
+        mountPath: /self-sup-online-pvc
+  volumes:
+    - name: hm-storage
+      persistentVolumeClaim:
+        claimName: hm-storage
+    - name: self-sup-online-pvc
+      persistentVolumeClaim:
+        claimName: self-sup-online-pvc

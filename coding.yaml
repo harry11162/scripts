@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: copy-dataset
+spec:
+  containers:
+  - name: mypod
+    image: ufoym/deepo
+    resources:
+      limits:
+        memory: 8Gi
+        cpu: 2
+      requests:
+        memory: 8Gi
+        cpu: 2
+    command: ["sh", "-c", "sleep infinity"]
+    volumeMounts:
+      - name: hm-storage
+        mountPath: /data
+  volumes:
+    - name: hm-storage
+      persistentVolumeClaim:
+          claimName: hm-storage

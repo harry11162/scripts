@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: get-penn
+spec:
+  restartPolicy: Never
+  containers:
+  - name: research
+    image: ufoym/deepo
+    #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+    imagePullPolicy: Always
+    # command: ["/bin/sh","-c"]
+    # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+    command: ["sh", "-c"]
+    args: ["cd newdata/datasets/penn_action;
+          wget -O Penn_Action.tar.gz https://public.boxcloud.com/d/1/b1!2EcblM03zSIFGSlZcMaeZmRqexdFt38iWtPdrS4yQ5qF3kUAnXggvtQWLdyiD9TJrK63b0Mhch6ijJgQ6Kgvx8m2aMr0mHtmkE7-5t8SQ4idXiT7X0PONRiMH0cn2aU9pdGzWE0K5kLe-JuypgiO7iPde_X97RaPlnTWMQKDttCvIMmkkG8f5J4nEq7djxuSh5NtWw43BP2F9XyJuHxp7Jo3N5RQ3fySgFQtVo9jrnzmNW4SLZq17O2CGUFu8QGEzhJjYlpK14xRDq0uhZ1FjPU4TAL6UP51QrY73rs_kCWK0sir7ABsWHT6bL59W7QdeedxKs1y592IoYO2q-fd6eaC7PbX93LpIapHsSD9y_gzB2JmWKjpOV07ATstFKwLV4XiBv0aX57-EYe-DnzRVbk_WjmKujDz8qWQkilS6ryIqWkI-phZW7VpZ1s-rgwUPctcSut1fpiDDuq_BIp2AA33vi0xQdJG0uMcP3ZoC2_6uT91MaWW9oyAy4wjG209J-WGFUIyXmA4NfKplEviyZqsoc_5tbkc1PnQ4UZ4UgIFTogSlGBMGOjvgLDl7MKeur5rEw20NOr4e27c1CSQdzNW5puEia7JBIJh2dnJj_mtEHvV665vBO2ebwQrCFEBmKb05Xx-NcvP63aZJ_lELbc-iH38BsJ8BsE-44I0j14Cpoa2t4vbpUzoCeGDo9LMMHTnxESdpcTenzFIblWgvkxivhgrBGVbOU0FQ_zYfo0nZShA4SZb5cNHa6Arkq-LAe-tp1WPivfWn08a25v8scfsM5SYmf3Cv3eIRpNJV946D-HwTP2bOtSDNVMHLHAb81TiOnYOgrv-ytysxdT4687lk6reb_N-sh__XZR2S390MZJo-s6ktwWGXLoiWygrHujslh6hcU0ySjF7lKAi2dsGZOy3Q9mJvvRpy2_tSOP-cAVx8XCYH9qdVdA3BviOyQ4QDHfNdQxsPtRIAYV_oNIoBtUyDgYSQNW4irdMbGCflwEJV4rkyUhBzI0IgZsXHzImGsqIB-PO5AF8gbiVrY9fPOYAsbet7QyGh9ty8aPrZsE3b4Sk8K36BO4Y-F0tboWIuI5EvVkurMhi27kokDkHeKDKNrvZ5-LBv093IG9IHZSpcBQK1UK3TNmA3xlmJxQysI9EYIzQCXN76krWYKPToQKVY2AFScY3q69pEnA5aNnXuaBl6N1BY8LleWcj4o-C00NYs1TBBU3Df14OiOiyK2_qferPJwiV1p9E1gOYnZYcOay61vo5OjuiElGMqKGzInqq5q7EDSsqNYw8/download"]
+    resources:
+      limits:
+        memory: 4Gi
+        cpu: 1
+      requests:
+        memory: 4Gi
+        cpu: 1
+    volumeMounts:
+      - name: hm-1t-storage
+        mountPath: /newdata
+  volumes:
+    - name: hm-1t-storage
+      persistentVolumeClaim:
+          claimName: hm-1t-storage

@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hrnet
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: research
+        image: ak3636/deeplearning:latest
+        #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+        imagePullPolicy: Always
+        # command: ["/bin/sh","-c"]
+        # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+        command: ["sh", "-c"]
+        args: ["eval \"$(ssh-agent -s)\";
+              mkdir /root/.ssh;
+              ssh-keyscan github.com >> /root/.ssh/known_hosts;
+              cp /newdata/ssh-keys/id_rsa ~/.ssh/;
+              cp /newdata/ssh-keys/id_rsa.pub ~/.ssh/;
+              chmod 600 ~/.ssh/id_rsa;
+              cd /newdata/projects/
+              pip3 install torch==1.5.0;
+              pip3 install torchvision==0.6.0;
+              cd cocoapi/PythonAPI;
+              make install;
+
+              pip3 install opencv-contrib-python;
+              pip3 install easydict;
+              pip3 install pyyaml;
+              pip3 install hdf5storage;
+              pip install metayaml;
+              pip install deepdish;
+              pip install -U scikit-learn;
+              pip3 install jupyter;
+              pip3 install --upgrade torch;
+              pip3 install tensorboard;
+              pip3 install opencv-python;
+              pip3 install metayaml;
+              pip3 install tb-nightly;
+              pip3 install tqdm;
+              cd /newdata/projects/hrnet-pose;
+              git pull;
+              pip3 install -r requirements.txt;
+              cd lib;
+              make;
+              cd /newdata/projects/hrnet-pose;
+              python3 tools/train_joint.py --cfg experiments/penn/resnet/res50_128x128.yaml"]
+        resources:
+          limits:
+            memory: 6Gi
+            cpu: 1
+            nvidia.com/gpu: 1
+          requests:
+            memory: 6Gi
+            cpu: 1
+            nvidia.com/gpu: 1
+        volumeMounts:
+            - name: hm-1t-storage
+              mountPath: /newdata
+            - name: hm-storage
+              mountPath: /data
+            - name: self-sup-online-pvc
+              mountPath: /self-sup-online-pvc
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: hm-1t-storage
+          persistentVolumeClaim:
+              claimName: hm-1t-storage
+        - name: hm-storage
+          persistentVolumeClaim:
+              claimName: hm-storage
+        - name: self-sup-online-pvc
+          persistentVolumeClaim:
+            claimName: self-sup-online-pvc
+        - name: dshm
+          emptyDir:
+            medium: Memory
