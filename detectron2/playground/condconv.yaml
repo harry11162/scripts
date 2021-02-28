@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: continous-faster-rcnn-baseline-r50
+  name: continous-condconv-baseline
 spec:
   template:
     spec:
