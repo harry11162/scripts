@@ -22,7 +22,7 @@ spec:
             git pull;
             cd /newdata;
             python3 -m pip install -e detectron2;
-            cd /newdata/detectron2/playground/faster-rcnn-R50;
+            cd /newdata/detectron2/playground/condconv-8experts;
             ln -s /newdata/domain .;
             python3 train_net.py --num-gpus 2 OUTPUT_DIR logs"]
         resources:
