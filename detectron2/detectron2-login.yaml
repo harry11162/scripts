@@ -25,6 +25,7 @@ spec:
           apt-get -yqq install gcc;
           apt-get -yqq install g++;
           apt-get -yqq install vim;
+          apt-get -yqq install wget;
           apt-get install ffmpeg libsm6 libxext6  -y;
           cd /newdata/detectron2;
           git pull;
