@@ -24,7 +24,7 @@ spec:
             python3 -m pip install -e detectron2;
             cd /newdata/detectron2/playground/combine_meta_hard_generate_gps;
             ln -s /newdata/domain .;
-            python3 train_net.py --num-gpus 2 --eval-only"]
+            python3 train_net.py --num-gpus 2 --eval-only MODEL.WEIGHTS /newdata/detectron2/playground/combine_meta_hard_generate_gps/logs/model_final.pth"]
         resources:
           limits:
             memory: 8Gi
