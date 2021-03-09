@@ -24,7 +24,7 @@ spec:
             python3 -m pip install -e detectron2;
             cd /newdata/detectron2/playground/day_baseline;
             ln -s /newdata/domain .;
-            python3 train_net.py --num-gpus 2 --eval-only MODEL.WEIGHTS /newdata/detectron2/playground/day_baseline/logs/model_final.pth DATASETS.TEST (\"domain_night_test\",)"]
+            python3 train_net.py --num-gpus 2 --eval-only MODEL.WEIGHTS /newdata/detectron2/playground/day_baseline/logs/model_final.pth DATASETS.TEST [\"domain_night_test\"]"]
         resources:
           limits:
             memory: 8Gi
