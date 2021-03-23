@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: res18-day-baseline
+  name: continous-mobilenet-baseline
 spec:
   template:
     spec:
