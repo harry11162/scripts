@@ -24,7 +24,7 @@ spec:
             python3 -m pip install -e detectron2;
             cd /newdata/detectron2/playground/mobilenet_night_baseline;
             ln -s /newdata/domain .;
-            python3 train_net.py --num-gpus 2"]
+            python3 train_net.py --num-gpus 2 --eval-only MODEL.WEIGHTS logs/model_0089999.pth"]
         resources:
           limits:
             memory: 8Gi
