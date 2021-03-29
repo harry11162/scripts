@@ -44,7 +44,7 @@ spec:
           pip install tqdm;
           cd lib;
           make;
-          cd /newdata/hrnet-pose;
+          cd /newdata/hrnet-pose/playground/baseline_joint;
           python3 train_joint.py"]
         resources:
           limits:
