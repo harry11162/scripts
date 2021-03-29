@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: posettt-baseline-joint
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: research
+        image: pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
+        #image: gitlab-registry.nautilus.optiputer.net/yol070/research-containers/research-tf36-v2:tag
+        imagePullPolicy: Always
+        # command: ["/bin/sh","-c"]
+        # args: ["eval \"$(ssh-agent -s)\";  ssh-add /data/ssh-keys/ssh-nitesh-rsa; chmod 600 /data/ssh-keys/ssh-nitesh-rsa.pub; chmod 600 /data/ssh-keys/ssh-$nitesh-rsa; mkdir /root/.ssh; ssh-keyscan github.com >> /root/.ssh/known_hosts; pip3 install opencv-contrib-python; pip3 install easydict; pip3 install pyyaml; pip3 install hdf5storage;  pip install metayaml; pip install deepdish; pip install -U scikit-learn; pip3 install jupyter; pip3 install --upgrade torch; pip3 install tensorboard; pip3 install opencv-python; pip3 install metayaml; pip3 install tb-nightly; echo Unzipping; mkdir -p /localdata/h36m_images/hm36; tar -xf /data/Projects/self-supervised-online/integral-human-pose/data/hm36/H36M-images.tar.gz -C /localdata/h36m_images/hm36/; echo CDing; cd /data/Projects/self-supervised-online/integral-human-pose/pytorch_projects/imm; export PYTHONPATH=$PYTHONPATH:$(pwd); echo pwd; pwd; cd /data/Projects/self-supervised-online/integral-human-pose; git pull origin master; /hooks/startup.sh" ]
+        command: ["sh", "-c"]
+        args: ["apt-get -yq update && apt-get -yqq install ssh;
+          apt-get -yq update && apt-get -yqq install git;
+          apt-get -yqq install gcc;
+          apt-get -yqq install g++;
+          apt-get -yqq install vim;
+          apt-get -yqq install wget;
+          apt-get install ffmpeg libsm6 libxext6  -y;
+          eval \"$(ssh-agent -s)\";
+          cd /newdata/cocoapi/PythonAPI;
+          make install;
+          cd /newdata/projects/hrnet-pose;
+          git pull https://harry11162:fa6130f5127d36f552bda1137e932e6113d0e3b4@github.com/harry11162/hrnet-pose.git;
+          pip3 install -r requirements.txt;
+          pip3 install opencv-contrib-python;
+          cd lib;
+          make;
+          cd /newdata/projects/hrnet-pose;
+          python3 train_joint.py"]
+        resources:
+          limits:
+            memory: 6Gi
+            cpu: 4
+            nvidia.com/gpu: 1
+          requests:
+            memory: 6Gi
+            cpu: 4
+            nvidia.com/gpu: 1
+        volumeMounts:
+            - name: hm-1t-storage
+              mountPath: /newdata
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: hm-1t-storage
+          persistentVolumeClaim:
+              claimName: hm-1t-storage
+        - name: dshm
+          emptyDir:
+            medium: Memory

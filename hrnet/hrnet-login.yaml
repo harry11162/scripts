@@ -20,18 +20,10 @@ spec:
           apt-get -yqq install wget;
           apt-get install ffmpeg libsm6 libxext6  -y;
           eval \"$(ssh-agent -s)\";
-          mkdir /root/.ssh;
-          ssh-keyscan github.com >> /root/.ssh/known_hosts;
-          cp /newdata/ssh-keys/id_rsa ~/.ssh/;
-          cp /newdata/ssh-keys/id_rsa.pub ~/.ssh/;
-          chmod 600 ~/.ssh/id_rsa;
-          cd /newdata/projects/
-          pip3 install torch==1.5.0;
-          pip3 install torchvision==0.6.0;
-          cd cocoapi/PythonAPI;
+          cd /newdata/cocoapi/PythonAPI;
           make install;
           cd /newdata/projects/hrnet-pose;
-          git pull;
+          git pull https://harry11162:fa6130f5127d36f552bda1137e932e6113d0e3b4@github.com/harry11162/hrnet-pose.git;
           pip3 install -r requirements.txt;
           pip3 install opencv-contrib-python;
           cd lib;
