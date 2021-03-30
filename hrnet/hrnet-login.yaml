@@ -38,7 +38,8 @@ spec:
           cd /newdata/cocoapi/PythonAPI;
           make install;
           cd /newdata/hrnet-pose;
-          git pull https://harry11162:07a0ab0fa8587a031920dbbef0637eff0e6b1f53@github.com/harry11162/hrnet-pose.git;
+          token=`cat /newdata/github_token.txt`;
+          git pull https://\"$token\"@github.com/harry11162/hrnet-pose.git;
           pip install -r requirements.txt;
           cd lib;
           make;
