@@ -23,12 +23,8 @@ spec:
           apt-get install ffmpeg libsm6 libxext6  -y;
           apt-get -yqq install build-essential;
           eval \"$(ssh-agent -s)\";
-          cd /newdata/cocoapi/PythonAPI;
-          make install;
-          cd /newdata/hrnet-pose;
-          git pull https://harry11162:fa6130f5127d36f552bda1137e932e6113d0e3b4@github.com/harry11162/hrnet-pose.git;
           pip install opencv-contrib-python;
-          pip install Cython;
+          pip install cython;
           pip install easydict;
           pip install pyyaml;
           pip install hdf5storage;
@@ -41,6 +37,10 @@ spec:
           pip install metayaml;
           pip install tb-nightly;
           pip install tqdm;
+          cd /newdata/cocoapi/PythonAPI;
+          make install;
+          cd /newdata/hrnet-pose;
+          git pull https://harry11162:07a0ab0fa8587a031920dbbef0637eff0e6b1f53@github.com/harry11162/hrnet-pose.git;
           pip install -r requirements.txt;
           cd lib;
           make;
