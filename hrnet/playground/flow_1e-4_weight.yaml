@@ -49,11 +49,11 @@ spec:
           python3 train_joint.py"]
         resources:
           limits:
-            memory: 6Gi
+            memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
           requests:
-            memory: 6Gi
+            memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
         volumeMounts:
