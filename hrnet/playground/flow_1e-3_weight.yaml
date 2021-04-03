@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: posettt-flow-1e-3-weight
+  name: posettt-flow-1e-3-weight-ttt
 spec:
   template:
     spec:
@@ -46,7 +46,7 @@ spec:
           cd lib;
           make;
           cd /newdata/hrnet-pose/playground/flow_1e-3_weight;
-          python3 train_joint.py"]
+          python3 test_time_training.py TEST.MODEL_FILE output/penn/imm_joint_model/config/model_best.pth TRAIN.LR 0.0005"]
         resources:
           limits:
             memory: 8Gi
