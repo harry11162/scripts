@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: continous-mobilenet-mix-day-night-baseline
+  name: continous-mobilenet-baseline
 spec:
   template:
     spec:
@@ -22,7 +22,7 @@ spec:
             git pull;
             cd /newdata;
             python3 -m pip install -e detectron2;
-            cd /newdata/detectron2/playground/mobilenet_mix_day_night_baseline;
+            cd /newdata/detectron2/playground/faster-rcnn-R18;
             ln -s /newdata/domain .;
             python3 train_net.py --num-gpus 2"]
         resources:
