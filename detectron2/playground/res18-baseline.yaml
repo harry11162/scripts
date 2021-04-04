@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: continous-mobilenet-baseline
+  name: continous-res18-baseline
 spec:
   template:
     spec:
