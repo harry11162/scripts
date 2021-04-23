@@ -48,11 +48,11 @@ spec:
     resources:
       limits:
         memory: 8Gi
-        cpu: 4
+        cpu: 2
         nvidia.com/gpu: 1
       requests:
         memory: 8Gi
-        cpu: 4
+        cpu: 2
         nvidia.com/gpu: 1
     volumeMounts:
       - name: hm-1t-storage
