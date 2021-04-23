@@ -35,12 +35,12 @@ spec:
           pip install metayaml;
           pip install tb-nightly;
           pip install tqdm;
-          pip install -r requirements.txt;
           cd /newdata/cocoapi/PythonAPI;
           make install;
           cd /newdata/hrnet-pose;
           token=`cat /newdata/github_token.txt`;
           git pull https://\"$token\"@github.com/harry11162/hrnet-pose.git;
+          pip install -r requirements.txt;
           cd lib;
           make;
           cd /newdata/hrnet-pose/playground/sup_unsup_share_13;
