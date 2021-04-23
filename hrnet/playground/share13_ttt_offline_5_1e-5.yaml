@@ -44,6 +44,7 @@ spec:
           cd lib;
           make;
           cd /newdata/hrnet-pose/playground/sup_unsup_share_13;
+          pip install -U opencv-python;
           python3 ttt_video_offline.py TEST.TTT_STEPS 5 TRAIN.LR 0.00001 TEST.MODEL_FILE /newdata/hrnet-pose/models/imm_models/sup_unsup_share_13_86.203.pth"]
     resources:
       limits:
