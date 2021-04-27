@@ -1,20 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: posettt-posenet-baseline-2080ti
+  name: posettt-posenet-baseline
 spec:
   template:
     spec:
       restartPolicy: Never
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu-type
-                operator: In
-                values:
-                - 2080Ti
       containers:
       - name: research
         image: pytorch/pytorch:1.7.0-cuda11.0-cudnn8-devel
