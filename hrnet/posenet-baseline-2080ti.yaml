@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: posettt-share13-ttt-offline-5steps-1e-5
+  name: posettt-posenet-baseline
 spec:
   template:
     spec:
@@ -37,16 +37,16 @@ spec:
           pip install metayaml;
           pip install tb-nightly;
           pip install tqdm;
-          pip install -r requirements.txt;
           cd /newdata/cocoapi/PythonAPI;
           make install;
           cd /newdata/hrnet-pose;
           token=`cat /newdata/github_token.txt`;
           git pull https://\"$token\"@github.com/harry11162/hrnet-pose.git;
+          pip install -r requirements.txt;
           cd lib;
           make;
-          cd /newdata/hrnet-pose/playground/sup_unsup_share_13;
-          python3 ttt_video_offline.py TEST.TTT_STEPS 5 TRAIN.LR 0.00001 TEST.MODEL_FILE /newdata/hrnet-pose/models/imm_models/sup_unsup_share_13_86.203.pth"]
+          cd /newdata/hrnet-pose/playground;
+          python3 tools/train.py --cfg experiments/penn/resnet/res50_128x128.yaml"]
         resources:
           limits:
             memory: 8Gi
