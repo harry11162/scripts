@@ -54,7 +54,7 @@ spec:
           pip install -r requirements.txt;
           cd lib;
           make;
-          cd /newdata/hrnet-pose/playground;
+          cd /newdata/hrnet-pose;
           python3 tools/train.py --cfg experiments/penn/resnet/res50_128x128.yaml"]
         resources:
           limits:
