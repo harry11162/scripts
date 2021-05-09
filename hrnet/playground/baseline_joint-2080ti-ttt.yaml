@@ -54,7 +54,7 @@ spec:
           pip install -r requirements.txt;
           cd lib;
           make;
-          cd /newdata/hrnet-pose/playground/baseline_joint;
+          cd /newdata/hrnet-pose/playground/baseline_joint_nodownsample;
           python3 test_time_training.py TEST.MODEL_FILE output/penn/imm_joint_model/config/final_state.pth TRAIN.LR 0.0005"]
         resources:
           limits:
